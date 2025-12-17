@@ -1,11 +1,17 @@
 #!/bin/bash
-# Quip Sync Interactive - Configure and run Quip folder sync
-# Double-click or run from terminal
+# Quip Sync Interactive - Configure and run Quip folder sync (Mac/Linux)
+# 
+# USAGE:
+#   ./quip_sync_interactive.sh
+#   
+# Or double-click in Finder (Mac)
+#
+# For Windows, use: quip_sync_interactive.bat
 
 cd "$(dirname "$0")"
 
 echo "========================================"
-echo "  Quip Folder Sync Tool"
+echo "  Quip Folder Sync Tool (Mac/Linux)"
 echo "========================================"
 echo ""
 

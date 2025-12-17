@@ -2,6 +2,8 @@
 """
 Quip Sync CLI - Command-line tool for syncing Quip folders to local directories
 
+Cross-platform: Works on Mac, Linux, and Windows
+
 Features:
 - Full sync with overwrite (--mode full)
 - Incremental sync - only modified files (--mode incremental)
@@ -9,13 +11,32 @@ Features:
 - Smart format selection (DOCX/XLSX/PDF)
 - Progress tracking and logging
 
-Usage:
-    python quip_sync_cli.py --token YOUR_TOKEN --mode full
-    python quip_sync_cli.py --token YOUR_TOKEN --mode incremental
+=== MAC / LINUX USAGE ===
+
+    # Using environment variable (recommended)
+    export QUIP_TOKEN='your_token_here'
+    python3 quip_sync_cli.py --mode incremental
     
-Environment variable alternative:
-    export QUIP_TOKEN=your_token
+    # Or pass token directly
+    python3 quip_sync_cli.py --token YOUR_TOKEN --mode full
+
+    # Interactive launcher
+    ./quip_sync_interactive.sh
+
+=== WINDOWS USAGE ===
+
+    # Using environment variable (recommended)
+    set QUIP_TOKEN=your_token_here
     python quip_sync_cli.py --mode incremental
+    
+    # Or pass token directly
+    python quip_sync_cli.py --token YOUR_TOKEN --mode full
+
+    # Interactive launcher (double-click or run in cmd)
+    quip_sync_interactive.bat
+
+=== GET YOUR API TOKEN ===
+    https://quip-amazon.com/dev/token
 """
 
 import argparse
