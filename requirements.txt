@@ -1,0 +1,6 @@
+# Core dependencies
+requests>=2.25.0
+
+# Optional: For creating standalone executables
+# Uncomment the line below if you want to create .exe/.app files
+# pyinstaller>=5.0.0
