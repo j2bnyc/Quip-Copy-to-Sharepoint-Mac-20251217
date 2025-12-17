@@ -18,6 +18,11 @@ Visit your Quip token page (e.g., `https://quip-mycompany.com/dev/token`)
 
 **Mac/Linux:**
 ```bash
+# Option 1: Run with bash (recommended)
+bash quip_sync_interactive.sh
+
+# Option 2: Run directly (may require chmod first)
+chmod +x quip_sync_interactive.sh
 ./quip_sync_interactive.sh
 ```
 
@@ -110,7 +115,12 @@ C:\Users\USERNAME\OneDrive - mycompany.com\Team - Documents\
 
 **Permission denied (Mac/Linux):**
 ```bash
+# Use bash to run directly (easiest fix)
+bash quip_sync_interactive.sh
+
+# Or make the script executable
 chmod +x quip_sync_interactive.sh
+./quip_sync_interactive.sh
 ```
 
 **Python not found:**
