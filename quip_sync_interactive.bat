@@ -9,26 +9,35 @@ echo   Quip Folder Sync Tool (Windows)
 echo ========================================
 echo.
 
-REM Default values
-set "DEFAULT_SOURCE=https://quip-amazon.com/jzKiObqykZYB/Citi-Team-Folder"
-set "DEFAULT_TARGET=C:\Users\%USERNAME%\OneDrive - amazon.com\Citigroup Account Team - Documents\QS"
-
 REM Get Quip folder URL
-echo Enter Quip folder URL
-echo   [Press Enter for default: %DEFAULT_SOURCE%]
+echo Enter Quip folder URL (root folder you want to copy)
+echo   Example: https://quip-mycompany.com/ABC123XYZ/My-Team-Folder
 set /p SOURCE_URL="> "
-if "%SOURCE_URL%"=="" set "SOURCE_URL=%DEFAULT_SOURCE%"
 echo.
+
+if "%SOURCE_URL%"=="" (
+    echo ERROR: Quip folder URL is required
+    echo Press any key to exit...
+    pause >nul
+    exit /b 1
+)
 
 REM Get destination path
-echo Enter destination folder path
-echo   [Press Enter for default: %DEFAULT_TARGET%]
+echo Enter destination folder path (local folder synced to SharePoint)
+echo   Example: C:\Users\username\OneDrive - mycompany.com\Team - Documents\Backup
 set /p TARGET_PATH="> "
-if "%TARGET_PATH%"=="" set "TARGET_PATH=%DEFAULT_TARGET%"
 echo.
 
+if "%TARGET_PATH%"=="" (
+    echo ERROR: Target folder path is required
+    echo Press any key to exit...
+    pause >nul
+    exit /b 1
+)
+
 REM Get PAT token
-echo Enter your Quip API token (get from https://quip-amazon.com/dev/token)
+echo Enter your Quip API token
+echo   Get from: https://quip-mycompany.com/dev/token
 echo   (Note: input will be visible on Windows)
 set /p QUIP_TOKEN="> "
 echo.

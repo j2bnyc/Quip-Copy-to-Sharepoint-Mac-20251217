@@ -15,30 +15,35 @@ echo "  Quip Folder Sync Tool (Mac/Linux)"
 echo "========================================"
 echo ""
 
-# Default values
-DEFAULT_SOURCE="https://quip-amazon.com/jzKiObqykZYB/Citi-Team-Folder"
-DEFAULT_TARGET="/Users/jimclrk/Library/CloudStorage/OneDrive-SharedLibraries-amazon.com/Citigroup Account Team - Documents/QS"
-
 # Get Quip folder URL
-echo "Enter Quip folder URL"
-echo "  [Press Enter for default: $DEFAULT_SOURCE]"
+echo "Enter Quip folder URL (root folder you want to copy)"
+echo "  Example: https://quip-mycompany.com/ABC123XYZ/My-Team-Folder"
 read -p "> " SOURCE_URL
-if [ -z "$SOURCE_URL" ]; then
-    SOURCE_URL="$DEFAULT_SOURCE"
-fi
 echo ""
+
+if [ -z "$SOURCE_URL" ]; then
+    echo "❌ Error: Quip folder URL is required"
+    echo "Press any key to exit..."
+    read -n 1
+    exit 1
+fi
 
 # Get destination path
-echo "Enter destination folder path"
-echo "  [Press Enter for default: $DEFAULT_TARGET]"
+echo "Enter destination folder path (local folder synced to SharePoint)"
+echo "  Example: /Users/username/Library/CloudStorage/OneDrive-SharedLibraries-mycompany.com/Team - Documents/Backup"
 read -p "> " TARGET_PATH
-if [ -z "$TARGET_PATH" ]; then
-    TARGET_PATH="$DEFAULT_TARGET"
-fi
 echo ""
 
+if [ -z "$TARGET_PATH" ]; then
+    echo "❌ Error: Target folder path is required"
+    echo "Press any key to exit..."
+    read -n 1
+    exit 1
+fi
+
 # Get PAT token
-echo "Enter your Quip API token (get from https://quip-amazon.com/dev/token)"
+echo "Enter your Quip API token"
+echo "  Get from: https://quip-mycompany.com/dev/token"
 echo "  (input is hidden for security)"
 read -s -p "> " QUIP_TOKEN
 echo ""

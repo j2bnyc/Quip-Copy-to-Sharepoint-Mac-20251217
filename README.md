@@ -12,7 +12,7 @@ pip install requests
 ```
 
 ### 2. Get Your API Token
-Visit: https://quip-amazon.com/dev/token
+Visit your Quip token page (e.g., `https://quip-mycompany.com/dev/token`)
 
 ### 3. Run the Sync
 
@@ -26,6 +26,12 @@ Visit: https://quip-amazon.com/dev/token
 quip_sync_interactive.bat
 ```
 
+The interactive script will prompt you for:
+- **Quip folder URL** - The root folder you want to copy
+- **Target folder** - Local folder synced to SharePoint/OneDrive
+- **API token** - Your personal access token
+- **Sync mode** - Incremental (default) or Full
+
 ## Sync Modes
 
 | Mode | Description |
@@ -36,33 +42,28 @@ quip_sync_interactive.bat
 ## Command Line Usage
 
 ```bash
-# Mac/Linux - Set token as environment variable
+# Mac/Linux
 export QUIP_TOKEN='your_token_here'
-python3 quip_sync_cli.py --mode incremental
+python3 quip_sync_cli.py \
+  --source "https://quip-mycompany.com/ABC123XYZ/My-Team-Folder" \
+  --target "/Users/username/Library/CloudStorage/OneDrive-SharedLibraries-mycompany.com/Team - Documents/Backup" \
+  --mode incremental
 
-# Windows - Set token as environment variable  
+# Windows
 set QUIP_TOKEN=your_token_here
-python quip_sync_cli.py --mode incremental
-
-# Or pass token directly (any platform)
-python quip_sync_cli.py --token YOUR_TOKEN --mode full
-```
-
-### All Options
-
-```bash
-python quip_sync_cli.py \
-  --token YOUR_TOKEN \
-  --source "https://quip-amazon.com/ABC123/FolderName" \
-  --target "/path/to/local/folder" \
+python quip_sync_cli.py ^
+  --source "https://quip-mycompany.com/ABC123XYZ/My-Team-Folder" ^
+  --target "C:\Users\username\OneDrive - mycompany.com\Team - Documents\Backup" ^
   --mode incremental
 ```
+
+### Options
 
 | Option | Description |
 |--------|-------------|
 | `--token`, `-t` | Quip API token (or set `QUIP_TOKEN` env var) |
-| `--source`, `-s` | Quip folder URL or ID |
-| `--target`, `-d` | Local destination directory |
+| `--source`, `-s` | Quip folder URL or ID (required) |
+| `--target`, `-d` | Local destination directory (required) |
 | `--mode`, `-m` | `full` or `incremental` (default) |
 | `--dry-run` | Preview without downloading |
 
@@ -93,12 +94,12 @@ Incremental sync tracks document modification times in `.quip_sync_state.json` i
 **Mac:**
 ```bash
 ls ~/Library/CloudStorage/
-# Example: ~/Library/CloudStorage/OneDrive-SharedLibraries-amazon.com/Team - Documents/
+# Example: ~/Library/CloudStorage/OneDrive-SharedLibraries-mycompany.com/Team - Documents/
 ```
 
 **Windows:**
 ```
-C:\Users\USERNAME\OneDrive - amazon.com\Team - Documents\
+C:\Users\USERNAME\OneDrive - mycompany.com\Team - Documents\
 ```
 
 ## Troubleshooting

@@ -36,7 +36,7 @@ Features:
     quip_sync_interactive.bat
 
 === GET YOUR API TOKEN ===
-    https://quip-amazon.com/dev/token
+    https://quip-mycompany.com/dev/token (replace with your Quip domain)
 """
 
 import argparse
@@ -47,18 +47,19 @@ import json
 from datetime import datetime
 import requests
 
-# Default configuration for Citi Team sync
-DEFAULT_SOURCE_URL = "https://quip-amazon.com/jzKiObqykZYB/Citi-Team-Folder"
-DEFAULT_TARGET_DIR = "/Users/jimclrk/Library/CloudStorage/OneDrive-SharedLibraries-amazon.com/Citigroup Account Team - Documents/QS"
+# No defaults - user must provide source and target
+# Example source: https://quip-mycompany.com/ABC123XYZ/My-Team-Folder
+# Example target: /Users/username/Library/CloudStorage/OneDrive-SharedLibraries-mycompany.com/Team - Documents/Backup
 SYNC_STATE_FILE = ".quip_sync_state.json"
 
 
 class QuipSyncClient:
     """Quip API client for syncing documents."""
     
-    def __init__(self, token, base_url="https://platform.quip-amazon.com/1"):
+    def __init__(self, token, base_url=None):
         self.token = token
-        self.base_url = base_url
+        # Base URL will be derived from source URL or default to platform.quip.com
+        self.base_url = base_url or "https://platform.quip.com/1"
         self.session = requests.Session()
         self.session.headers.update({
             'Authorization': f'Bearer {token}',
@@ -137,7 +138,8 @@ def extract_folder_id(url_or_id):
     import re
     if not url_or_id.startswith('http'):
         return url_or_id
-    match = re.search(r'quip-amazon\.com/([A-Za-z0-9]+)', url_or_id)
+    # Match various Quip URL patterns (quip.com, quip-*.com, etc.)
+    match = re.search(r'quip[^/]*\.com/([A-Za-z0-9]+)', url_or_id)
     if match:
         return match.group(1)
     raise ValueError(f"Could not extract folder ID from: {url_or_id}")
@@ -292,7 +294,7 @@ Examples:
   python quip_sync_cli.py --mode incremental
   
   # Custom source and target
-  python quip_sync_cli.py --token YOUR_TOKEN --source "https://quip-amazon.com/ABC123" --target "/path/to/folder"
+  python quip_sync_cli.py --token YOUR_TOKEN --source "https://quip-mycompany.com/ABC123" --target "/path/to/folder"
         """
     )
     
@@ -309,13 +311,17 @@ Examples:
     )
     parser.add_argument(
         "--source", "-s",
-        default=DEFAULT_SOURCE_URL,
-        help=f"Quip folder URL or ID (default: {DEFAULT_SOURCE_URL})"
+        required=True,
+        help="Quip folder URL or ID (root folder to sync from)"
     )
     parser.add_argument(
         "--target", "-d",
-        default=DEFAULT_TARGET_DIR,
-        help=f"Target local directory (default: {DEFAULT_TARGET_DIR})"
+        required=True,
+        help="Target local directory (e.g., SharePoint/OneDrive synced folder)"
+    )
+    parser.add_argument(
+        "--base-url",
+        help="Quip API base URL (auto-detected from source URL if not provided)"
     )
     parser.add_argument(
         "--dry-run",
@@ -329,7 +335,7 @@ Examples:
     if not args.token:
         print("❌ Error: Quip API token required")
         print("   Provide via --token or set QUIP_TOKEN environment variable")
-        print("   Get your token from: https://quip-amazon.com/dev/token")
+        print("   Get your token from: https://quip-mycompany.com/dev/token")
         sys.exit(1)
     
     # Extract folder ID
@@ -360,8 +366,17 @@ Examples:
         print(f"📅 Last sync: {sync_state['last_sync']}")
         print()
     
+    # Derive base URL from source URL if not provided
+    base_url = args.base_url
+    if not base_url and args.source.startswith('http'):
+        import re
+        match = re.search(r'(https?://[^/]+)', args.source)
+        if match:
+            domain = match.group(1).replace('quip-', 'platform.quip-').replace('quip.com', 'platform.quip.com')
+            base_url = f"{domain}/1"
+    
     # Create client and start sync
-    client = QuipSyncClient(args.token)
+    client = QuipSyncClient(args.token, base_url)
     start_time = time.time()
     
     try:
