@@ -156,6 +156,3 @@ Solutions:
 - Close OneDrive temporarily while running the sync
 - Or sync to a local folder first, then copy to OneDrive
 
-## Legacy GUI Version
-
-The original GUI exporter files (`quip_exporter_gui.py`, `native_export.py`, etc.) are also included for users who prefer a graphical interface.
