@@ -127,6 +127,35 @@ chmod +x quip_sync_interactive.sh
 - Mac: `brew install python` or download from python.org
 - Windows: Download from python.org, check "Add to PATH"
 
+**Path too long errors (especially Windows):**
+
+Windows has a 260-character path limit by default. OneDrive/SharePoint paths can be long, and deeply nested Quip folders make it worse.
+
+Solutions:
+1. **Use a shorter target path:**
+   - Instead of: `C:\Users\username\OneDrive - mycompany.com\Team - Documents\Quip Backup\`
+   - Try: `C:\QuipSync\` then move/copy to SharePoint after
+
+2. **Enable long paths on Windows 10/11:**
+   ```
+   # Run PowerShell as Administrator
+   New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
+   ```
+   Then restart your computer.
+
+3. **Shorten folder names in Quip** before syncing (if you have edit access)
+
+4. **Sync a subfolder** instead of the entire root folder to reduce nesting depth
+
+**Files fail to sync / API errors:**
+- Check your API token is valid and not expired
+- Verify you have access to the Quip folder
+- Some documents may be restricted or corrupted in Quip
+
+**OneDrive sync conflicts:**
+- Close OneDrive temporarily while running the sync
+- Or sync to a local folder first, then copy to OneDrive
+
 ## Legacy GUI Version
 
 The original GUI exporter files (`quip_exporter_gui.py`, `native_export.py`, etc.) are also included for users who prefer a graphical interface.
